@@ -24,23 +24,23 @@ class Graph:
         self.dot.render()
 
 
-fn = "day 7/sample"
+fn = "day 7/in"
 with open(fn, "r") as f:
     rules = f.read().splitlines()
 
-pattern = r"(.+?) bags contain (?:(\d+) (.+?) bag(?:s?)(?:, |.$))*"
+pattern = r"(.+) bags contain(?: (\d+) (.+?) bag[s]?[,.])*"
+pattern = regex.compile(pattern)
 
 g = Graph()
 
 for r in rules:
-    m = regex.match(pattern, r)
-    parent = m.captures(1)[0]
-    nums = m.captures(2)
-    children = m.captures(3)
+    m = pattern.match(r)
+    parent, = m.captures(1)
+    nums, children = m.captures(2, 3)
 
     for child, num in zip(children, nums):
         g.add_edge(parent, child, num)
 
 
-# print(g.num_nested_bags("shiny gold"))
-g.render()
+print(g.num_nested_bags("shiny gold"))
+# g.render()

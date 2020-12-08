@@ -33,13 +33,14 @@ fn = "day 7/in"
 with open(fn, "r") as f:
     rules = f.read().splitlines()
 
-pattern = r"(.+) bags contain (?:(\d+) (.+?) bag(?:s?)(?:, |.$))*"
+pattern = r"(.+) bags contain(?: (\d+) (.+?) bag[s]?[,.])*"
+pattern = regex.compile(pattern)
 
 g = Graph()
 
 for r in rules:
-    m = regex.match(pattern, r)
-    parent = m.captures(1)[0]
+    m = pattern.match(r)
+    parent, = m.captures(1)
     children = m.captures(3)
 
     for child in children:
