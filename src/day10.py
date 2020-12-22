@@ -1,6 +1,23 @@
-from collections import defaultdict
+from collections import Counter, defaultdict
 from functools import lru_cache
 from graphviz import Digraph
+
+
+def part_1(fn):
+    """
+    What is the number of 1-jolt differences multiplied by the number of 3-jolt differences?
+    """
+    with open(fn, "r") as f:
+        adapters = sorted(map(int, f.read().splitlines()))
+
+    adapters = [0] + adapters + [adapters[-1] + 3]
+
+    diffs = Counter()
+
+    for cur, nxt in zip(adapters[:-1], adapters[1:]):
+        diffs[nxt - cur] += 1
+
+    return diffs[1] * diffs[3]
 
 
 class Graph:
@@ -24,7 +41,11 @@ class Graph:
         return num_ways
 
 
-def solve(fn):
+def part_2(fn):
+    """
+    What is the total number of distinct ways you can arrange the adapters to
+    connect the charging outlet to your device?
+    """
     with open(fn, "r") as f:
         adapters = sorted(map(int, f.read().splitlines()))
     adapters = [0] + adapters + [adapters[-1] + 3]
@@ -40,6 +61,11 @@ def solve(fn):
     return g.count_ways("0")
 
 
-assert solve(fn="day 10/sample") == 8
-assert solve(fn="day 10/sample2") == 19208
-print(solve(fn="day 10/in"))
+assert part_1(fn="sample/day10_1.txt") == 7 * 5
+assert part_1(fn="sample/day10_2.txt") == 22 * 10
+
+assert part_2(fn="sample/day10_1.txt") == 8
+assert part_2(fn="sample/day10_2.txt") == 19208
+
+print(part_1(fn="input/day10.txt"))
+print(part_2(fn="input/day10.txt"))

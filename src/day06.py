@@ -16,5 +16,6 @@ def sum_counts_2(groups: List[str]):
 
 assert sum_counts_1(read_input("day 6/sample")) == 11
 assert sum_counts_2(read_input("day 6/sample")) == 6
+
 print(sum_counts_1(read_input("day 6/in")))
 print(sum_counts_2(read_input("day 6/in")))

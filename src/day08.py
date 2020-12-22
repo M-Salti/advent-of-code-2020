@@ -14,8 +14,7 @@ class disjoint_sets:
         return self.p[x]
 
     def unite(self, x: int, y: int) -> bool:
-        x = self.find(x)
-        y = self.find(y)
+        x, y = self.find(x), self.find(y)
         if x == y:
             return False
         if self.p[x] > self.p[y]:
@@ -38,7 +37,7 @@ class Solution:
             self.instructions = f.read().splitlines()
         self.program_length = len(self.instructions)
         self.dot = Digraph(
-            format="svg", graph_attr={"rankdir": "LR", "dpi": "55"}, directory="day 8"
+            name="day08", format="svg", graph_attr={"rankdir": "LR", "dpi": "55"}
         )
         self.dsu = disjoint_sets(self.program_length + 1)
 
@@ -94,9 +93,36 @@ class Solution:
         return acc
 
 
-assert Solution("day 8/sample").solve() == 8
+def calc_accumulater(fn: str) -> int:
+    with open(fn) as f:
+        instructions = f.read().splitlines()
 
-fn = "day 8/in"
-solution = Solution(fn)
+    visited = [False] * len(instructions)
+    acc = 0
+    counter = 0  # program counter
+
+    while True:
+        if visited[counter]:
+            break
+        visited[counter] = True
+
+        op, arg = instructions[counter].split()
+        if op == "acc":
+            acc += int(arg)
+            counter += 1
+        elif op == "jmp":
+            counter += int(arg)
+        elif op == "nop":
+            counter += 1
+
+    return acc
+
+
+assert calc_accumulater("sample/day08.txt") == 5
+sample = Solution("sample/day08.txt")
+assert sample.solve() == 8
+sample.render()
+
+print(calc_accumulater("input/day08.txt"))
+solution  = Solution("input/day08.txt")
 print(solution.solve())
-solution.render()

@@ -1,5 +1,9 @@
 // #define _GLIBCXX_DEBUG
-#include <bits/stdc++.h>
+#include <assert.h>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -9,9 +13,11 @@ const int dc[] = {0, 1, -1, 0, 1, -1, 1, -1};
 
 int nrows, ncols;
 
-auto in_grid = [](int i, int j) { return i >= 0 && j >= 0 && i < nrows && j < ncols; };
+auto in_grid = [](int i, int j) {
+  return i >= 0 && j >= 0 && i < nrows && j < ncols;
+};
 
-vector<string> apply_step(const vector<string>& grid, int rules_type) {
+vector<string> apply_step(const vector<string> &grid, int rules_type) {
   int num_steps = -1;
   int occ_thresh = -1;
 
@@ -28,13 +34,15 @@ vector<string> apply_step(const vector<string>& grid, int rules_type) {
   for (int i = 0; i < nrows; ++i) {
     for (int j = 0; j < ncols; ++j) {
       const char cur = grid[i][j];
-      if (cur == '.') continue;
+      if (cur == '.')
+        continue;
       int filled = 0;
       for (int d = 0; d < 8; ++d) {
         int ii = i, jj = j;
         for (int s = 0; s < num_steps; ++s) {
           ii += dr[d], jj += dc[d];
-          if (!in_grid(ii, jj)) break;
+          if (!in_grid(ii, jj))
+            break;
           if (grid[ii][jj] != '.') {
             filled += grid[ii][jj] == '#';
             break;
@@ -43,8 +51,7 @@ vector<string> apply_step(const vector<string>& grid, int rules_type) {
       }
       if (cur == '#' && filled >= occ_thresh) {
         new_grid[i][j] = 'L';
-      }
-      else if (cur == 'L' && filled == 0) {
+      } else if (cur == 'L' && filled == 0) {
         new_grid[i][j] = '#';
       }
     }
@@ -66,8 +73,8 @@ int count_filled(vector<string> grid, int rules_type) {
   }
 
   int ans = 0;
-  for (auto& i : grid) {
-    for (auto& j : i) {
+  for (auto &i : grid) {
+    for (auto &j : i) {
       ans += (j == '#');
     }
   }
@@ -87,12 +94,12 @@ vector<string> read_input(const string fn) {
 
 int main() {
   // test cases
-  auto grid = read_input("sample");
+  auto grid = read_input("../sample/day11.txt");
   assert(count_filled(grid, 1) == 37);
   assert(count_filled(grid, 2) == 26);
-  // 
+  //
 
-  grid = read_input("in");
+  grid = read_input("../input/day11.txt");
   cout << count_filled(grid, 1) << endl;
   cout << count_filled(grid, 2) << endl;
 

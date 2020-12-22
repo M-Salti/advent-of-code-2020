@@ -1,11 +1,15 @@
-fn = "day 9/in"
+from typing import List
+
+
+def read_input(fn) -> List[int]:
+    with open(fn, "r") as f:
+        return list(map(int, f.read().splitlines()))
+
+
 pre_len = 25
 
-with open(fn, "r") as f:
-    nums = list(map(int, f.read().splitlines()))
 
-
-def find_invalid_number():
+def find_invalid_number(nums: List[int]) -> int:
     for i in range(pre_len, len(nums)):
         found = False
         for j in range(i - pre_len, i):
@@ -20,8 +24,8 @@ def find_invalid_number():
     return -1
 
 
-def find_range():
-    invalid = find_invalid_number()
+def find_range(nums: List[int]) -> int:
+    invalid = find_invalid_number(nums)
     index = 0
     queue = []
     qsum = 0
@@ -37,8 +41,14 @@ def find_range():
             qsum += queue[-1]
             index += 1
 
-    return queue
+    rng = sorted(queue)
+    return rng[0] + rng[-1]
 
-rng = find_range()
-rng = sorted(rng)
-print(rng[0] + rng[-1])
+
+pre_len = 5
+assert find_invalid_number(read_input("sample/day09.txt")) == 127
+assert find_range(read_input("sample/day09.txt")) == 62
+
+pre_len = 25
+print(find_invalid_number(read_input("input/day09.txt")))
+print(find_range(read_input("input/day09.txt")))
